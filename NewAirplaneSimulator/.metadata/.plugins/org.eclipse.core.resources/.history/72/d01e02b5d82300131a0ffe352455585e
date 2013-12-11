@@ -1,0 +1,76 @@
+package simulator;
+
+public class CalculateTime 
+{
+	public CalculateTime()
+	{
+		
+	}
+	
+	double calculateBoardTime(int boardingMethod, Passenger[] passengerList, double totalBoardTime, int moveToRow, int moveToBack, int windowSitTime, int middleSitTime, int aisleSitTime)
+	{
+		if(boardingMethod == 0)
+		{
+			//Look at each passenger in passengerList to add their board time to totalBoardTime
+			for (int i = 0; i < passengerList.length; i++)
+			{
+				//Initialize variables used inside for loop
+				int j = 0;
+				String stringPassengerRow = "";
+				String curPassengerColumn = "";
+	
+				//Parse current passenger's row number from their seat destination
+				while(Character.isDigit(passengerList[i].destination.charAt(j)))
+				{
+					stringPassengerRow = stringPassengerRow + passengerList[i].destination.charAt(j);
+					j++;
+				}
+				
+				int curPassengerRow = Integer.parseInt(stringPassengerRow);
+				
+				//Parse current passenger's column letter from their seat destination
+				curPassengerColumn = "" + passengerList[i].destination.charAt(stringPassengerRow.length());
+								
+				//Add time for next person in line to move to their row after the person ahead of them
+				//has sat down
+				totalBoardTime = totalBoardTime + moveToRow;
+				
+				totalBoardTime = addSittingTime(passengerList, curPassengerColumn, curPassengerRow, moveToBack, totalBoardTime, windowSitTime, middleSitTime, aisleSitTime, i);
+			}
+		}
+		
+		if(boardingMethod == 1)
+		{
+			
+		}
+		return totalBoardTime;
+	}
+	
+	private double addSittingTime(Passenger[] passengerList, String curPassengerColumn, int curPassengerRow, int moveToBack, double totalBoardTime, int windowSitTime, int middleSitTime, int aisleSitTime, int i)
+	{
+		//Add 4 sec * total number of rows to account for time first passenger needs to
+		//walk to the back of the plane
+		if(i == (passengerList.length - 1))
+		{
+			totalBoardTime = totalBoardTime + (curPassengerRow * moveToBack);
+		}
+		
+		//Add time for passenger to sit in their seat, based on seat's column
+		if(curPassengerColumn.contains("A") || curPassengerColumn.contains("F"))
+		{
+			totalBoardTime = totalBoardTime + windowSitTime;
+		}
+		
+		if(curPassengerColumn.contains("B") || curPassengerColumn.contains("E"))
+		{
+			totalBoardTime = totalBoardTime + middleSitTime;
+		}
+		
+		if(curPassengerColumn.contains("C") || curPassengerColumn.contains("D"))
+		{
+			totalBoardTime = totalBoardTime + aisleSitTime;
+		}
+		
+		return totalBoardTime;
+	}
+}

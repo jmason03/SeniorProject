@@ -1,0 +1,374 @@
+package simulator;
+
+public class CalculateTime 
+{
+	public CalculateTime()
+	{
+		
+	}
+	
+	double calculateBoardTime(int boardingMethod, Passenger[] passengerList, int totalRows, double totalBoardTime, int moveToRow, int moveToBack, int windowSitTime, int middleSitTime, int aisleSitTime, int debugSelection, int[][] plane)
+	{
+		if(boardingMethod == 0)
+		{
+			//Look at each passenger in passengerList to add their board time to totalBoardTime
+			for (int i = 0; i < passengerList.length; i++)
+			{
+				//Initialize variables used inside for loop
+				String curPassengerColumn = "";
+				
+				int curPassengerRow = getPassengerRow(passengerList, i);
+				
+				//Get number of digits in row, this is used to know where at in the destination string the seat column
+				//letter is located
+				int digitsinRow = String.valueOf(curPassengerRow).length();
+				
+				//Parse current passenger's column letter from their seat destination
+				curPassengerColumn = "" + passengerList[i].destination.charAt(digitsinRow);
+								
+				//Add time for next person in line to move to their row after the person ahead of them
+				//has sat down
+				totalBoardTime = totalBoardTime + moveToRow;
+				
+				totalBoardTime = addBackToFrontTime(passengerList, curPassengerColumn, curPassengerRow, moveToBack, totalBoardTime, windowSitTime, middleSitTime, aisleSitTime, i);
+			}
+			
+			//totalBoardTime = addRandomBoardingTime(passengerList, totalBoardTime, totalRows);
+		}
+		
+		else if(boardingMethod == 1)
+		{
+			for (int i = 0; i < passengerList.length; i++)
+			{
+				//Initialize variables used inside for loop
+				String curPassengerColumn = "";
+				
+				int curPassengerRow = getPassengerRow(passengerList, i);
+				
+				//Get number of digits in row, this is used to know where at in the destination string the seat column
+				//letter is located
+				int digitsinRow = String.valueOf(curPassengerRow).length();
+				
+				//Parse current passenger's column letter from their seat destination
+				curPassengerColumn = "" + passengerList[i].destination.charAt(digitsinRow);
+				
+				totalBoardTime = addFrontToBackTime(passengerList, curPassengerColumn, curPassengerRow, moveToBack, moveToRow, totalBoardTime, windowSitTime, middleSitTime, aisleSitTime, i);
+			}
+		}
+		
+		else if(boardingMethod == 2)
+		{
+			totalBoardTime = addAlternatingWMATime(totalRows, moveToBack, totalBoardTime, windowSitTime, middleSitTime, aisleSitTime);
+		}
+		
+		//Assert that boardingMethod = 3
+		else
+		{
+			totalBoardTime = addRandomBoardingTime(passengerList, totalBoardTime, totalRows, debugSelection, plane);
+		}
+		return totalBoardTime;
+	}
+	
+	private double addBackToFrontTime(Passenger[] passengerList, String curPassengerColumn, int curPassengerRow, int moveToBack, double totalBoardTime, int windowSitTime, int middleSitTime, int aisleSitTime, int i)
+	{
+		//Add 4 sec * total number of rows to account for time first passenger needs to
+		//walk to the back of the plane
+		if(i == (passengerList.length - 1))
+		{
+			totalBoardTime = totalBoardTime + (curPassengerRow * moveToBack);
+		}
+		
+		//Add time for passenger to sit in their seat, based on seat's column
+		if(curPassengerColumn.contains("A") || curPassengerColumn.contains("F"))
+		{
+			totalBoardTime = totalBoardTime + windowSitTime;
+		}
+		
+		if(curPassengerColumn.contains("B") || curPassengerColumn.contains("E"))
+		{
+			totalBoardTime = totalBoardTime + middleSitTime;
+		}
+		
+		if(curPassengerColumn.contains("C") || curPassengerColumn.contains("D"))
+		{
+			totalBoardTime = totalBoardTime + aisleSitTime;
+		}
+		
+		return totalBoardTime;
+	}
+	
+	private double addFrontToBackTime(Passenger[] passengerList, String curPassengerColumn, int curPassengerRow, int moveToBack, int moveToRow, double totalBoardTime, int windowSitTime, int middleSitTime, int aisleSitTime, int i)
+	{
+		//Add time for passenger to sit in their seat, based on seat's column
+		if(curPassengerColumn.contains("A") || curPassengerColumn.contains("F"))
+		{
+			totalBoardTime = totalBoardTime + windowSitTime + moveToRow;
+		}
+		
+		else if(curPassengerColumn.contains("B") || curPassengerColumn.contains("E"))
+		{
+			totalBoardTime = totalBoardTime + middleSitTime + moveToRow;
+		}
+		
+		else if(curPassengerColumn.contains("C"))
+		{
+			totalBoardTime = totalBoardTime + aisleSitTime + moveToRow;
+		}
+		
+		//Assert that curPassengerColumn must equal D
+		//Add windowSitTime + time for person behind curPassenger to move to next row
+		else 
+		{
+			totalBoardTime = totalBoardTime + aisleSitTime + (2 * moveToRow);
+		}
+		
+		return totalBoardTime;
+	}
+	
+	private double addAlternatingWMATime(int totalRows, int moveToBack, double totalBoardTime, int windowSitTime, int middleSitTime, int aisleSitTime)
+	{
+		int walkToBack = moveToBack * totalRows;
+
+		totalBoardTime = totalBoardTime + (walkToBack * 6) + (2 * windowSitTime) + (2 * middleSitTime) + (2 * aisleSitTime);
+
+		return totalBoardTime;
+	}
+	
+	double addRandomBoardingTime(Passenger[] passengerList, double totalBoardTime, int totalRows, int debugSelection, int[][] plane)
+	{
+		//Initialize variables
+		Passenger[] activePassengers = new Passenger[1];
+		activePassengers[0] = passengerList[0];
+		int clockTicks = 0;
+		int passengerPositionAdded = 0;
+		int extraStandUpTime = 0;
+		
+		//While there are still active passengers
+		while(activePassengers.length > 0)
+		{
+			//Initialize rowBlocked to be greater than totalRows
+			//Indicates that no row is currently blocked
+			int rowBlocked = totalRows + 1;
+			
+			//For each passenger in the current active passenger list
+			for(int i = 0; i < activePassengers.length; i++)
+			{
+				//If activePassengers[i].cDT = 0
+				//If passenger has reached their target row
+				if(activePassengers[i].targetRow == activePassengers[i].currentRow && activePassengers[i].cDT == 0)
+				{
+					//Set current passenger cDT to their sit time + 1 and indicate that current row
+					//is blocked
+					activePassengers[i].cDT = activePassengers[i].sitTime + 1;
+					rowBlocked = activePassengers[i].targetRow;
+					
+					extraStandUpTime = checkPassengerSeats(activePassengers[i], passengerList, plane);
+					activePassengers[i].cDT = activePassengers[i].cDT + extraStandUpTime;
+				}
+				
+				//If rowBlocked is not the current passenger's next row, assert that the 
+				//row is free for a new passenger to be added
+				//to the active passenger list and move up to row 1
+				if(rowBlocked != activePassengers[i].currentRow + 1 && activePassengers[i].cDT < 1)
+				{
+					activePassengers[i].currentRow = activePassengers[i].currentRow + 1;
+				}
+				
+				//If passenger cDT is greater than one, decrement cDT
+				if(activePassengers[i].cDT > 1)
+				{
+					activePassengers[i].cDT = activePassengers[i].cDT - 1;
+					rowBlocked = activePassengers[i].targetRow;
+				}
+				
+				//If the passenger cDT is 1, that person is assumed to have sat down
+				//and is removed from active passenger list
+				else if(activePassengers[i].cDT == 1)
+				{
+					passengerList[activePassengers[i].listPosition].seated = true;
+					int columnNumber = getAlphabetPosition(activePassengers[i].targetColumn);
+					plane[activePassengers[i].targetRow - 1][columnNumber - 1] = activePassengers[i].passengerID;
+					activePassengers = deletePassengerAtPosition(activePassengers, passengerList, i);
+					i--;
+				}
+				
+				else
+				{
+					rowBlocked = activePassengers[i].currentRow;
+				}
+				
+			}
+			
+			//If rowBlocked is greater than 1, assert that row 1 is free and a new passenger
+			//can be added to the active passenger list
+			if(rowBlocked > 1 && passengerPositionAdded < passengerList.length - 1 && activePassengers.length < totalRows + 1)
+			{
+				Passenger[] tempPassengers = addPassenger(passengerList, activePassengers);
+				
+				//Increment passengerPositionAdded to reference the next passenger in passengerList
+				//that has not yet been added to the active Passengers list
+				passengerPositionAdded++;
+				
+				tempPassengers[tempPassengers.length - 1] = passengerList[passengerPositionAdded];
+				
+				activePassengers = tempPassengers;
+				
+			}
+			
+			//Increment clockTicks
+			clockTicks++;
+			
+			//Debug Mode is enabled
+			if(debugSelection == 1)
+			{
+				printDebugChart(activePassengers);
+			}
+		}
+		
+		return clockTicks + totalBoardTime;
+	}
+	
+	
+	private int getPassengerRow(Passenger[] passengerList, int i)
+	{
+		int j = 0;
+		String stringPassengerRow = "";
+		
+		//Parse current passenger's row number from their seat destination
+		while(Character.isDigit(passengerList[i].destination.charAt(j)))
+		{
+			stringPassengerRow = stringPassengerRow + passengerList[i].destination.charAt(j);
+			j++;
+		}
+		
+		int curPassengerRow = Integer.parseInt(stringPassengerRow);
+		
+		return curPassengerRow;
+	}
+	
+	private int passengerStandUpTime(int targetRow, String targetColumn, int sitTime, Passenger[] passengerList, int[][] plane)
+	{
+		//Initialize variables
+		int standUpTime = 0;
+		int position = getPassengerPosition(passengerList, targetRow, targetColumn);
+		int columnNumber = getAlphabetPosition(targetColumn);
+		
+		//If there is a passenger sitting at the given position, add necessary time to current passenger cDT
+		//plane[targetRow - 1][columnNumber - 1] != 0
+		if(position != -1)
+		{
+			standUpTime = (passengerList[position].sitTime * 2);
+		}
+		
+		return standUpTime;
+	}
+	
+	int getPassengerPosition(Passenger[] passengerList, int targetRow, String targetColumn)
+	{
+		//Initialize variables
+		int position = -1;
+		int i = 0;
+		
+		//While a passenger has not been found at the given seat location
+		while(position == -1 && i < passengerList.length)
+		{
+			//If the current passenger has the given seat location, store their position in the list
+			if((passengerList[i].targetRow == targetRow) && (passengerList[i].targetColumn.contains(targetColumn)))
+				position = i;
+			i++;
+		}
+		
+		return position;
+	}
+	
+	int checkPassengerSeats(Passenger currentPassenger, Passenger[] passengerList, int[][] plane)
+	{
+		int extraTime = 0;
+		
+		//Examine any seat that is in the way of current passenger
+		//Check if a passenger is already sitting there
+		if(currentPassenger.targetColumn.contains("A"))
+		{
+			extraTime = passengerStandUpTime(currentPassenger.targetRow, "B", currentPassenger.sitTime, passengerList, plane);
+			extraTime = passengerStandUpTime(currentPassenger.targetRow, "C", currentPassenger.sitTime, passengerList, plane) + extraTime;
+		}	
+		
+		else if(currentPassenger.targetColumn.contains("B"))
+		{
+			extraTime = passengerStandUpTime(currentPassenger.targetRow, "C", currentPassenger.sitTime, passengerList, plane);
+		}
+		
+		else if(currentPassenger.targetColumn.contains("E"))
+		{
+			extraTime = passengerStandUpTime(currentPassenger.targetRow, "D", currentPassenger.sitTime, passengerList, plane);
+		}
+		
+		else if(currentPassenger.targetColumn.contains("F"))
+		{
+			extraTime = passengerStandUpTime(currentPassenger.targetRow, "D", currentPassenger.sitTime, passengerList, plane);
+			extraTime = passengerStandUpTime(currentPassenger.targetRow, "E", currentPassenger.sitTime, passengerList, plane) + extraTime;
+		}
+		
+		return extraTime;
+	}
+	
+	Passenger[] deletePassengerAtPosition(Passenger[] activePassengers, Passenger[] passengerList, int i)
+	{
+		//Indicate that passenger has seated
+		passengerList[activePassengers[i].listPosition].seated = true;
+		
+		//Create temp list to store copies of still active passengers
+		Passenger[] tempPassengers = new Passenger[activePassengers.length - 1];
+		
+		//For each passenger before the one that will be deleted
+		for(int j = 0; j < i; j++)
+		{
+			tempPassengers[j] = activePassengers[j];
+		}
+		
+		//For each passenger after the one that will be deleted
+		for(int k = i; k < tempPassengers.length; k++)
+		{
+			tempPassengers[k] = activePassengers[k + 1];
+		}
+		
+		activePassengers = tempPassengers;
+		
+		return activePassengers;
+	}
+	
+	Passenger[] addPassenger(Passenger[] passengerList, Passenger[] activePassengers)
+	{
+		Passenger[] tempPassengers = new Passenger[activePassengers.length + 1];
+		for(int j = 0; j < tempPassengers.length - 1; j++)
+		{
+			tempPassengers[j] = activePassengers[j];
+		}
+		
+		return tempPassengers;
+	}
+	
+	void printDebugChart(Passenger[] activePassengers)
+	{
+		System.out.printf("%1s  %-10s   %-10s  %-14s%n", "Passenger ID", "Current Row", "Destination", "CDT");
+		
+		for(int i = 0; i < activePassengers.length; i++)
+		{
+			Passenger currentPassenger = activePassengers[i];
+			System.out.printf("%7d  %11s   %11s   %6d%n", currentPassenger.listPosition, currentPassenger.currentRow, currentPassenger.destination, currentPassenger.cDT);
+		}
+		
+		System.out.println("");
+	}
+	
+	int getAlphabetPosition(String targetColumn)
+	{
+		int firstLetter = 'A';
+		char passengerColumn = targetColumn.charAt(0);
+		int ascii = (int) passengerColumn;
+		int columnNumber = passengerColumn - firstLetter + 1;
+		
+		return columnNumber;
+	}
+	
+}

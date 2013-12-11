@@ -1,0 +1,211 @@
+<!DOCTYPE html PUBLIC "-//IETF//DTD HTML 3.0//EN">
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1252"><title>Airplane Turn Time</title></head><body alink="#FF0000" bgcolor="#FFFFFF" link="#555555" text="#000000" vlink="#555555"><br><font face="arial, geneva, sans-serif" size="+1"><b>The Role of Computer Simulation in Reducing Airplane Turn Time</b></font><br><br><br><font face="arial, geneva, sans-serif" size="+1">Airplane
+ turn time -- the time required to unload an airplane after its arrival 
+at the gate and to prepare it for departure again -- has increased since
+ the mid-1970s. Boeing has created a computer simulation that can help 
+airlines reduce one of the key elements of turn time: passenger boarding
+ (enplaning and deplaning). Decreasing passenger boarding time may 
+significantly lower the amount of time between revenue flights, and so 
+increase profitability to airlines. </font><p><font face="arial, geneva, sans-serif">As
+ airlines face increasing pressure to improve profitability, they are 
+striving to carry the greatest number of passengers feasible while 
+keeping their fleets in revenue service as much as possible -- all 
+without compromising passenger convenience. </font></p><p><font face="arial, geneva, sans-serif">One
+ way airlines can move toward this goal is to reduce airplane turn time.
+ Turn time is the time required to unload an airplane following arrival 
+at a gate and to ensure that the airplane is ready and loaded for its 
+next departure. The most significant elements of turn time include 
+passenger enplaning and deplaning, cargo loading and unloading, airplane
+ fueling, cabin cleaning, and galley servicing. <a href="#fig1">(figure 1)</a></font></p><p><font face="arial, geneva, sans-serif">For
+ many airlines the largest factor in turn time is the passenger boarding
+ process. Boeing has conducted studies to help understand the airplane's
+ contribution to turn time. The company is continually working with 
+customer airlines to develop the data and tools necessary to help reduce
+ turn time without significantly affecting passenger convenience.</font></p><p><font face="arial, geneva, sans-serif">During its studies, Boeing considered the following:<br>1 Historical trends.<br>2 Existing turn time documentation.<br>3 Computer simulation tools.<br>4 Discrete event simulation.<br>5 Simulation validation and testing.<br>6 Applications of computer simulation.<br></font></p><p><font face="arial, geneva, sans-serif">1 HISTORICAL TRENDS<br>The
+ majority of the standard body fleet has been experiencing a gradual 
+increase in airplane turn time since 1975. A useful indicator is the 
+airlines' reported increase in through-stop times, the ground time 
+required for flights continuing on to other destinations. <a href="#fig2">(figure 2)</a>
+ Increased turn time is further substantiated by Boeing boarding rate 
+studies. Since 1970, the actual speed at which passengers boarded an 
+airplane (enplane rate) has slowed by more than 50 percent, down to as 
+low as 9 passengers per minute. <a href="#fig3">(figure 3)</a> Similar 
+through-stop time increases and boarding rates have been observed for 
+wide-body airplanes. The trends are generally attributed to increased 
+passenger carry-on luggage, more emphasis on passenger convenience, 
+passenger demographics, airline service strategies, and airplane flight 
+distance (stage length). Boeing believes that these trends will continue
+ unless the root causes are understood and new tools and processes are 
+developed to reverse the trend.</font></p><p><font face="arial, geneva, sans-serif">2 EXISTING TURN TIME DOCUMENTATION<br>Boeing
+ has documented airplane turn time, including the passenger loading 
+process, for many years. This documentation describes the "generic" flow
+ time expected for each airplane. <a href="#fig1">(figure 1)</a> The 
+information helps an airline schedule ground times and establish 
+airplane ground handling procedures. However, the general nature of this
+ information does not help airlines evaluate alternative procedures that
+ could shorten flow time or help the airlines predict the impact of 
+these procedures on passenger convenience. </font></p><p><font face="arial, geneva, sans-serif">3 COMPUTER SIMULATION<br>Boeing
+ developed a computer simulation model to help airlines reduce turn 
+time. This model analyzes the impact of interior configuration changes 
+and variations in passenger boarding procedures on the passenger 
+boarding process. The simulation can quantify potential changes that an 
+airline would normally identify only through costly and potentially 
+disruptive in-service experiments. Though using the model does not 
+completely eliminate the need to conduct passenger loading trials, it 
+can effectively quantify the expected outcome. This allows the airline 
+to limit in-service trials. </font></p><p><font face="arial, geneva, sans-serif">Called
+ the Boeing Passenger Enplane/Deplane Simulation (PEDS), this simulation
+ helps the user evaluate different passenger boarding scenarios and 
+airplane interior configurations. The simulation: </font></p><ul type="SQUARE"><font face="arial, geneva, sans-serif"> 	<li>Calculates passenger loading and unloading time, allowing the airline to conduct turn time trade studies analytically. 	</li><li>Allows
+ individual factors such as interior configuration, passenger mix, and 
+boarding scenarios to  be varied and then estimates the expected time 
+savings.  	</li><li>Evaluates potential changes to interior configurations. 	</li><li>Evaluates the effect of passenger behaviors associated with different traveling populations.  	</li><li>Helps quantify the effect of passenger behavior variations that an airline may encounter over time.</li></font></ul><p><font face="arial, geneva, sans-serif">4 DISCRETE EVENT SIMULATION<br>PEDS
+ analyzes the passenger boarding process as a set of interrelated 
+elements through a technique called discrete event simulation. This 
+modeling technique uses computer software to combine the effects of 
+mathematical queuing theory with an analysis of random behavior. </font></p><p><font face="arial, geneva, sans-serif">Random
+ behavior associated with passenger loading can occur either in activity
+ timing (when events happen) or in action decisions (how people act). 
+The more complex the overall activities are, the more difficult it is to
+ accurately predict the impacts of the random behavior. </font></p><p><font face="arial, geneva, sans-serif">Boeing
+ began using discrete event simulation to understand interactions in the
+ factory environment. In 1994, Boeing started applying the discrete 
+event model in passenger boarding studies. PEDS assigns each passenger 
+certain attributes, such as walking speed, type of carry-on luggage, 
+luggage put-away time, and relationship with other passengers (traveling
+ alone or with a group). The simulation accounts for random behavior by 
+applying probability distributions to passenger attributes. </font></p><p><font face="arial, geneva, sans-serif">In
+ discrete event simulations, each activity happens at specific 
+intervals. The activity starts, continues for a finite period of time, 
+then stops. Similar to a car passing along a city street, each airplane 
+passenger enters the cabin and "travels" to his assigned seat. Various 
+other activities, such as passengers standing in the aisle, assisting 
+family members, or waiting to store luggage in the overhead bins, act as
+ traffic lights that prevent passengers from speeding through the cabin 
+to their seats. PEDS breaks down the passenger loading process into a 
+series of finite elements of starting, moving, stopping, waiting, and 
+restarting, beginning with the moment the first passenger enters the 
+cabin and ending when the last passenger is seated. </font></p><p><font face="arial, geneva, sans-serif">In
+ the computer model, engineers use the software to create a mathematical
+ scene of the interior of the airplane, complete with seats, overhead 
+bins, aisles, and doors. Each passenger is individually modeled and 
+assigned attributes that describe some segment of the traveling 
+population. The simulation then governs the decisions of each passenger 
+based on these attributes and the timing of each event (waiting or 
+moving) as he or she passes through the cabin.</font></p><p><font face="arial, geneva, sans-serif">In
+ addition to varying passenger "speed," the simulation allows variation 
+in other attributes. Each run of the simulation calculates the total 
+elapsed time and provides visibility into the various "choke" points 
+identified by the scenario. To eliminate statistical bias, multiple 
+simulations are run on the identical interior configuration using 
+different random number starting points, and the results are then 
+averaged over the multiple runs.</font></p><p><font face="arial, geneva, sans-serif">The
+ process begins by establishing a general airplane simulation. This 
+simulation is then "tailored" using the airline's specific interior 
+configuration, boarding procedures, and passenger demographics. A series
+ of baseline runs is conducted to validate PEDS predictions with the 
+airline's in-service experience. This turn time baseline allows the 
+airline to evaluate potential changes to interior layout or boarding 
+procedures against existing time lines.</font></p><p><font face="arial, geneva, sans-serif">5 SIMULATION VALIDATIONAND TESTING<br>A
+ simulation is valid only if it accurately predicts what happens during 
+actual events. In order to validate PEDS, Boeing conducted two types of 
+activities:</font></p><ul type="SQUARE"><font face="arial, geneva, sans-serif"> 	<li>In-service observation. 	</li><li>Actual passenger loading tests.</li></font></ul><p><font face="arial, geneva, sans-serif"><b>In-service observation. </b><br>Boeing
+ engineers observed revenue passenger loading activities with different 
+airlines at several different airports around the world. The loading 
+process was timed and correlated to simulation predictions. These 
+exercises were conducted on a random basis so that timed data would be 
+representative of actual experience. However, this method of validation 
+had two limitations:</font></p><ul type="SQUARE"><font face="arial, geneva, sans-serif">	<li>It did not  allow observations of all the interac tions between passengers or with the air plane configu ration. 	</li><li>It only validated simulation predictions of  existing airline loading procedures.</li></font></ul><p><font face="arial, geneva, sans-serif"><b>Actual passenger loading tests. </b><br>In order to provide additional information, Boeing conducted a series of passenger loading tests.</font></p><p><font face="arial, geneva, sans-serif">The
+ tests were conducted on a fully configured 757-200 airplane located in a
+ Boeing factory. A loading platform was modified to simulate an airport 
+passenger loading bridge, and a staging area was used to simulate an 
+airport gate waiting area. Trained airline flight attendants used 
+procedures inside the airplane and at the loading bridge that reflected 
+actual airport and airline operations. </font></p><p><font face="arial, geneva, sans-serif">A
+ total of 600 non-Boeing people, representative of the typical traveling
+ population, participated in the enplane/deplane tests. Each passenger 
+was requested to bring carry-on luggage typical for a three- to 
+four-hour flight. The passenger population was varied for each test, 
+with each passenger participating in only two sets of enplane/deplane 
+tests to prevent "learning"that could alter the test results. The 
+following four enplane/ deplane scenarios were then run: </font></p><ul type="SQUARE"><font face="arial, geneva, sans-serif">	<li>Door 1 only.	</li><li>Door 2 only.	</li><li>Both Door 1 and Door 2.	</li><li>Both Door 1 and 2 with an  alternative passenger loading method called "outside-in."</li></font></ul><p><font face="arial, geneva, sans-serif">The
+ outside-in scenario involves loading passengers at the window seats 
+first, middle seats next, and aisle seats last. The outside-in test was 
+designed to validate the simulation's ability to handle nontraditional 
+procedures.</font></p><p><font face="arial, geneva, sans-serif">Each 
+test was timed and videotaped for comparison with the simulation's 
+predictions. Video cameras located on the loading bridge and throughout 
+the passenger cabin recorded each test for later analysis.</font></p><p><font face="arial, geneva, sans-serif">The
+ tests showed that PEDS performed well in predicting both enplane and 
+deplane times for each scenario. However, the videotapes documented some
+ unexpected interaction among passengers during the loading process. For
+ example, several passengers stowed their carry-on luggage in overhead 
+bins located away from their seats. This happened while they were 
+waiting behind people who were blocking the aisle, rather than waiting 
+for the aisle to clear and then stowing their luggage when they reached 
+their seats. This additional information allowed Boeing to refine PEDS 
+to account for this type of behavior. </font></p><p><font face="arial, geneva, sans-serif">6 APPLICATIONS OF THE COMPUTER SIMULATION<br>PEDS offers several applications both for airlines and for Boeing:</font></p><ul type="SQUARE"><font face="arial, geneva, sans-serif">	<li>Analysis of the impact of airplane interior configuration on turn time.	</li><li>Evaluation of potential changes to passenger loading procedures.</li></font></ul><p><font face="arial, geneva, sans-serif"><b>Airplane interior configuration.</b>
+ Both Boeing and the customer airline can use PEDS initially to help 
+configure the airplane interior. PEDS improves their understanding of 
+how a proposed configuration affects passenger loading. Passenger 
+boarding times become part of interior configuration decisions, similar 
+to decisions made about aesthetic appearance and passenger comfort.</font></p><p><font face="arial, geneva, sans-serif"><b>Evaluation of potential changes to passenger loading procedures. </b>The
+ simulation also helps airlines evaluate potential changes to passenger 
+loading procedures. Boarding alternatives such as outside-in, multiple 
+preboarding, or even unassigned seating can be evaluated using an 
+airline's target passenger population. Airlines can quantify potential 
+savings without incurring the expense of boarding trials or risking 
+passenger inconvenience. Airlines can use PEDS to evaluate even small 
+procedural changes, such as increased involvement by flight attendants 
+or emphasis on reduced passenger carry-on luggage. </font></p><p><font face="arial, geneva, sans-serif">Alternatives
+ that show significant promise can then be tested in the field. PEDS 
+helps airlines develop detailed implementation plans for new procedures 
+and logistics needed to decrease turn time, including flight attendant 
+training and airport logistics.</font></p><p><font face="arial, geneva, sans-serif">Boeing is currently working with a number of airlines to evaluate PEDS for their specific applications.</font></p><p><font face="arial, geneva, sans-serif">SUMMARY<br>Decreased
+ airplane turn time can positively affect airline profitability. A new 
+computer simulation developed by Boeing offers airlines an analytical 
+method for evaluating changes to airplane configuration or passenger 
+loading techniques and their impact on airplane turn times. The 
+simulation is a cost-effective tool to help airlines rapidly predict 
+results with a high degree of success.</font></p><p><font face="arial, geneva, sans-serif">--------------------------------------------------</font></p><p><font face="arial, geneva, sans-serif">GETTING HELP WITH TURN TIME REDUCTION<br>The
+ Boeing Passenger Enplane/ Deplane Simulation (PEDS) offers airlines an 
+additional tool to help reduce turn time. Depending on an individual 
+airline's operation, other elements of turn time, such as cargo 
+handling, cabin cleaning, or galley servicing, may also be improved.</font></p><p><font face="arial, geneva, sans-serif">Boeing
+ has a team of turn time experts that can work with airlines to analyze 
+specific areas of concern. Airlines interested in evaluating solutions 
+to their turn time problems should contact their local Field Service or 
+Customer Requirements representative for assistance.</font></p><p><font face="arial, geneva, sans-serif">--------------------------------------------------</font></p><p><font face="arial, geneva, sans-serif">EVALUATING TURN TIME ON THE NEW 757-300<br>The
+ initial application of the Boeing Passenger Enplane/Deplane Simulation 
+(PEDS) was on the new 757-300 airplane. PEDS helps evaluate various 
+passenger boarding scenarios to determine how to reduce airplane turn 
+time.</font></p><p><font face="arial, geneva, sans-serif">The 757-300 is
+ a stretched derivative of the 757-200. It is 23 feet, 4 inches longer 
+than its predecessor and holds approximately 40 more seats. </font></p><p><font face="arial, geneva, sans-serif">Several
+ potential customers for the 757-300 had told Boeing that, based on 
+their experience with other standard-body airplanes, they were concerned
+ about the new airplane's potentially greater turn time. </font></p><p><font face="arial, geneva, sans-serif">Boeing
+ used the 757-200 as a baseline for evaluating passenger boarding on the
+ 757-300. PEDS predicted that passenger loading for the 757-200 would 
+take approximately 22 minutes and that deplaning would take about 10 
+minutes. The predicted overall turn time for the 757-200 was 52.5 
+minutes, including cargo handling, fueling, galley servicing, and cabin 
+cleaning. The estimated time was based on actual airline in-service turn
+ times for the 757.</font></p><p><font face="arial, geneva, sans-serif">Applying
+ PEDS to a 757-300 dual-class configuration with 240 passengers showed 
+that passenger loading would require 26 minutes, and that unloading 
+would take about 12.5 minutes. The predicted overall turn time was 59 
+minutes, an increase of only 6.5 minutes over the 757-200. <a href="#fig5a">(figure 5a)</a></font></p><p><font face="arial, geneva, sans-serif">Boeing
+ then used PEDS to evaluate a number of alternative boarding scenarios. 
+Simulation predictions were compared to the 757-200 passenger boarding 
+test to validate results. Based on these validated predictions, it was 
+possible to identify significant potential reductions to overall turn 
+times for the 757-300. For example:</font></p><ul type="SQUARE"><font face="arial, geneva, sans-serif">	<li>Using Door 2 instead of Door 1, boarding time (enplaning and deplaning) was reduced by one minute. 	</li><li>Using Door 1 and Door 2  together saved five minutes. 	</li><li>If
+ alternative loading procedures were used -- such as the "outside-in" 
+method of loading (window seats first, middle seats next, and aisle 
+seats last) -- the savings could be as great as 17 minutes. <a href="#fig5b">(figure 5b)</a></li></font></ul><p><font face="arial, geneva, sans-serif">PEDS
+ showed that the new 757-300 could be operated within the normal 757 
+turn time window of 60 minutes without making notable changes to 
+existing procedures. It also showed that turn time could be reduced 
+significantly if airlines used alternative passenger boarding methods.</font></p><p><font face="arial, geneva, sans-serif"><a name="fig1">figure 1</a></font></p><p><font face="arial, geneva, sans-serif"><img src="Role%20of%20Computer%20Simulation%20-%20Boeing_files/tfig1.gif" border="0" height="322" width="594"><br><br><br><a name="fig2">figure 2</a></font></p><p><font face="arial, geneva, sans-serif"><img src="Role%20of%20Computer%20Simulation%20-%20Boeing_files/tfig2.gif" border="0" height="309" width="496"><br><br><br><a name="fig3">figure 3</a></font></p><p><font face="arial, geneva, sans-serif"><img src="Role%20of%20Computer%20Simulation%20-%20Boeing_files/tfig3.gif" border="0" height="313" width="494"><br><br><br><a name="fig5a">figure 5a</a></font></p><p><font face="arial, geneva, sans-serif"><img src="Role%20of%20Computer%20Simulation%20-%20Boeing_files/tfig5a.gif" border="0" height="432" width="468"><br><br><br><a name="fig5b">figure 5b</a></font></p><p><font face="arial, geneva, sans-serif"><img src="Role%20of%20Computer%20Simulation%20-%20Boeing_files/tfig5b.gif" border="0" height="338" width="522"><br><br><br></font><font face="arial, geneva, sans-serif" size="-1"><b>Scott Marelli, P.E.</b><br>Senior Math/Modeling Analyst<br>Applied Research and Technology<br>Boeing Shared Services Group<br></font></p><p><font face="arial, geneva, sans-serif" size="-1"><b>Gregory Mattocks</b><br>Lead Engineer<br>757 Configuration and Engineering Analysis<br>Boeing Commercial Airplane Group<br></font></p><p><font face="arial, geneva, sans-serif" size="-1"><b>Remick Merry</b><br>Senior Specialist Engineer<br>New Airplane Customer Service<br>Boeing Commercial Airplane Group<br></font><font face="arial, geneva, sans-serif" size="1"></font></p><p><font face="arial, geneva, sans-serif" size="1"><a href="#top">return to top</a>  | <a href="http://www.boeing.com/commercial/aeromagazine/aero_01/textonly/textonly.html">AERO text-only contents</a> | <a href="http://www.boeing.com/" target="_top">Boeing Home</a> | <a href="http://www.boeing.com/commercial/" target="_top">Commercial</a><br><a href="http://www.boeing.com/companyoffices/aboutus/copyright.html" target="_top">Copyright</a> ©  The Boeing Company. All rights reserved.</font></p></body></html>

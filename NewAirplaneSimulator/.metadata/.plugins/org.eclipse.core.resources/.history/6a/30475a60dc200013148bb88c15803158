@@ -1,0 +1,111 @@
+    import java.applet.Applet;  
+    import java.awt.Color;  
+    import java.awt.Graphics;  
+    import java.awt.Image;  
+    import java.awt.Rectangle;  
+    import java.util.Calendar;  
+    import java.util.logging.Level;  
+    import java.util.logging.Logger;  
+      
+    class Node   
+    {  
+      int x, y , r, xinc = 10, yinc = 10, width = 700, height = 700;  
+          
+        Node(int x1, int y1, int r1)  
+        {  
+            x = x1;  
+            y = y1;  
+            r = r1;  
+        }  
+          
+        public void move()  
+        {  
+             x+=xinc;  
+             y+=yinc;  
+               
+             if(x<0 || x>1000-2*r)  
+                {  
+                        xinc=-xinc;  
+                        x+=xinc;  
+                }  
+      
+               if(y<0 || y>700-2*r)  
+                {  
+                       yinc=-yinc;  
+                       y+=yinc;  
+                }  
+        }  
+          
+         public void paint(Graphics g)  
+         {  
+              g.setColor(Color.red);  
+              g.drawOval(x,y,2*r,2*r);  
+         }  
+    }  
+      
+    public class Motion extends Applet implements Runnable  
+    {  
+        public Rectangle bounds = getBounds();  
+        int xa[] = new int[] { 400, 300, 200, 100};  
+        int ya[] = new int[] { 100, 200, 300, 400};  
+        int ra[] = new int[] { 50, 70, 90, 120 };  
+        Thread runner;  
+        Image Buffer;  
+        Graphics gBuffer;  
+        Node nodes[];  
+              
+        public void init()  
+        {  
+            Buffer=createImage(size().width,size().height);  
+            gBuffer=Buffer.getGraphics();  
+            int size = xa.length;  
+            nodes = new Node[size];  
+            for(int i = 0 ; i<size; i++)  
+            {  
+                nodes[i] = new Node(xa[i], ya[i], ra[i]);  
+            }  
+        }  
+          
+        public void start()  
+        {  
+             if (runner == null)  
+             {  
+                 runner = new Thread (this);  
+                 runner.start();  
+             }  
+        }  
+      
+        public void stop()  
+        {  
+             if (runner != null)  
+             {  
+                 runner.stop();  
+                 runner = null;  
+             }  
+        }  
+          
+       public void run()  
+       {  
+            while(true)  
+            {  
+                 try {runner.sleep(15);}  
+                 catch (Exception e) { }  
+                 for(int i=0;i<xa.length;i++)  
+                     nodes[i].move();  
+      
+                 repaint();  
+            }  
+       }  
+      
+      public void update(Graphics g)  
+       {  
+            paint(g);  
+       }  
+        
+       public void paint(Graphics g)  
+       {  
+           for(int i=0;i<xa.length;i++)  
+             nodes[i].paint(g);  
+             
+       }  
+    }  

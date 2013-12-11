@@ -1,0 +1,21 @@
+package simulator;
+
+public class PassengerList 
+{
+	PassengerList()
+	{
+		
+	}
+	
+	Passenger[] createPassengerList(int totalPassengers, String[] seatList)
+	{
+		//Create list of passengers and assign them to a seat in seatList
+		Passenger[] passengerList = new Passenger[totalPassengers];
+		
+		for (int i = 0; i < totalPassengers; i++)
+		{ 
+			passengerList[i] = new Passenger(5, 0, seatList[seatList.length - (i + 1)]);
+		}
+		return passengerList;
+	}
+}

@@ -1,0 +1,147 @@
+package simulator;
+
+public class CalculateTime 
+{
+	public CalculateTime()
+	{
+		
+	}
+	
+	double calculateBoardTime(int boardingMethod, Passenger[] passengerList, int totalRows, double totalBoardTime, int moveToRow, int moveToBack, int windowSitTime, int middleSitTime, int aisleSitTime)
+	{
+		if(boardingMethod == 0)
+		{
+			//Look at each passenger in passengerList to add their board time to totalBoardTime
+			for (int i = 0; i < passengerList.length; i++)
+			{
+				//Initialize variables used inside for loop
+				String curPassengerColumn = "";
+				
+				int curPassengerRow = getPassengerRow(passengerList, i);
+				
+				//Get number of digits in row, this is used to know where at in the destination string the seat column
+				//letter is located
+				int digitsinRow = String.valueOf(curPassengerRow).length();
+				
+				//Parse current passenger's column letter from their seat destination
+				curPassengerColumn = "" + passengerList[i].destination.charAt(digitsinRow);
+								
+				//Add time for next person in line to move to their row after the person ahead of them
+				//has sat down
+				totalBoardTime = totalBoardTime + moveToRow;
+				
+				totalBoardTime = addBackToFrontTime(passengerList, curPassengerColumn, curPassengerRow, moveToBack, totalBoardTime, windowSitTime, middleSitTime, aisleSitTime, i);
+			}
+		}
+		
+		else if(boardingMethod == 1)
+		{
+			for (int i = 0; i < passengerList.length; i++)
+			{
+				//Initialize variables used inside for loop
+				String curPassengerColumn = "";
+				
+				int curPassengerRow = getPassengerRow(passengerList, i);
+				
+				//Get number of digits in row, this is used to know where at in the destination string the seat column
+				//letter is located
+				int digitsinRow = String.valueOf(curPassengerRow).length();
+				
+				//Parse current passenger's column letter from their seat destination
+				curPassengerColumn = "" + passengerList[i].destination.charAt(digitsinRow);
+				
+				totalBoardTime = addFrontToBackTime(passengerList, curPassengerColumn, curPassengerRow, moveToBack, moveToRow, totalBoardTime, windowSitTime, middleSitTime, aisleSitTime, i);
+			}
+		}
+		
+		//Assert that boardingMethod = 2
+		else
+		{
+			totalBoardTime = addAlternatingWMATime(totalRows, moveToBack, totalBoardTime, windowSitTime, middleSitTime, aisleSitTime);
+		}
+		return totalBoardTime;
+	}
+	
+	private double addBackToFrontTime(Passenger[] passengerList, String curPassengerColumn, int curPassengerRow, int moveToBack, double totalBoardTime, int windowSitTime, int middleSitTime, int aisleSitTime, int i)
+	{
+		//Add 4 sec * total number of rows to account for time first passenger needs to
+		//walk to the back of the plane
+		if(i == (passengerList.length - 1))
+		{
+			totalBoardTime = totalBoardTime + (curPassengerRow * moveToBack);
+		}
+		
+		//Add time for passenger to sit in their seat, based on seat's column
+		if(curPassengerColumn.contains("A") || curPassengerColumn.contains("F"))
+		{
+			totalBoardTime = totalBoardTime + windowSitTime;
+		}
+		
+		if(curPassengerColumn.contains("B") || curPassengerColumn.contains("E"))
+		{
+			totalBoardTime = totalBoardTime + middleSitTime;
+		}
+		
+		if(curPassengerColumn.contains("C") || curPassengerColumn.contains("D"))
+		{
+			totalBoardTime = totalBoardTime + aisleSitTime;
+		}
+		
+		return totalBoardTime;
+	}
+	
+	private double addFrontToBackTime(Passenger[] passengerList, String curPassengerColumn, int curPassengerRow, int moveToBack, int moveToRow, double totalBoardTime, int windowSitTime, int middleSitTime, int aisleSitTime, int i)
+	{
+		//Add time for passenger to sit in their seat, based on seat's column
+		if(curPassengerColumn.contains("A"))
+		{
+			totalBoardTime = totalBoardTime + windowSitTime + moveToRow;
+		}
+		
+		else if(curPassengerColumn.contains("B") || curPassengerColumn.contains("E"))
+		{
+			totalBoardTime = totalBoardTime + middleSitTime + moveToRow;
+		}
+		
+		else if(curPassengerColumn.contains("C") || curPassengerColumn.contains("D"))
+		{
+			totalBoardTime = totalBoardTime + aisleSitTime + moveToRow;
+		}
+		
+		//Assert that curPassengerColumn must equal F
+		//Add windowSitTime + time for person behind curPassenger to move to next row
+		else 
+		{
+			totalBoardTime = totalBoardTime + windowSitTime + (3 * moveToRow);
+		}
+		
+		return totalBoardTime;
+	}
+	
+	private double addAlternatingWMATime(int totalRows, int moveToBack, double totalBoardTime, int windowSitTime, int middleSitTime, int aisleSitTime)
+	{
+		int walkToBack = moveToBack * totalRows;
+
+		totalBoardTime = totalBoardTime + (walkToBack * 6) + (2 * windowSitTime) + (2 * middleSitTime) + (2 * aisleSitTime);
+
+		return totalBoardTime;
+	}
+	
+	
+	private int getPassengerRow(Passenger[] passengerList, int i)
+	{
+		int j = 0;
+		String stringPassengerRow = "";
+		
+		//Parse current passenger's row number from their seat destination
+		while(Character.isDigit(passengerList[i].destination.charAt(j)))
+		{
+			stringPassengerRow = stringPassengerRow + passengerList[i].destination.charAt(j);
+			j++;
+		}
+		
+		int curPassengerRow = Integer.parseInt(stringPassengerRow);
+		
+		return curPassengerRow;
+	}
+}

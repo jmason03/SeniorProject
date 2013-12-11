@@ -1,0 +1,116 @@
+@charset "utf-8";
+/* CSS Document */
+
+@font-face
+{
+	font-family: MyriadPro;
+	src: url(myriad-pro/MYRIADPRO-REGULAR.OTF);
+}
+
+h1, h2, h3, h4
+{
+	margin: 0;
+	padding: 0;
+	color: #FFF;
+}
+
+html
+{
+	background: url(images/background.jpg) no-repeat center center fixed;
+  	-webkit-background-size: cover;
+  	-moz-background-size: cover;
+  	-o-background-size: cover;
+ 	background-size: cover;
+	font-family: MyriadPro;
+}
+
+body
+{
+	margin: 5px 20px 0px 20px;
+}
+
+h1
+{
+	font-size: 32px;
+	font-weight: bold;
+}
+
+h2
+{
+	font-size: 30px;
+}
+
+h3
+{
+	font-size: 24px;
+	font-weight: normal;
+}
+
+h4
+{
+	padding: 0px 0px 0px 15px;
+	font-size: 18px;
+	font-weight: normal;
+}
+
+img
+{
+	margin: 15px 0px;
+}
+
+.clear
+{
+	clear: both;
+	float: none;
+}
+
+#maincontent
+{
+	margin: 0px 20px 0px 20px;
+	float: left;
+}
+
+.programbox
+{
+	width: 294px;
+	height: 140px;
+	margin: 30px 0px 0px 3px;
+	padding: 60px 0px 0px 0px;
+	float: left;
+	background: #AAA;
+	border-radius: 4px;
+	box-shadow: 0px 0px 1px 2px #333;
+	text-align: center;
+	cursor: pointer;
+}
+
+.middlebox
+{
+	margin-left: 30px;
+}
+
+.description
+{
+	margin: 20px 0px 0px 0px;
+	padding: 10px 15px 15px 15px;
+	background: #FFF;
+	border-radius: 3px;
+	box-shadow: 0px 0px 1px 2px #333;
+	font-size: 16px;
+}
+
+#header
+{
+	padding: 10px 0px 10px 20px;
+	border-radius: 20px;
+	background:#888;
+}
+
+#results
+{
+	width: 300px;
+	margin: 40px 0px 0px 465px;
+	float: left;
+	font-size: 30px;
+	text-align: center;
+}

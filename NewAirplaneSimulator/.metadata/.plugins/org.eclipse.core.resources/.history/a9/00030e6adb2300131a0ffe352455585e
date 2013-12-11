@@ -1,0 +1,183 @@
+/**
+ * 
+ */
+package simulator;
+import java.awt.Graphics2D;
+import java.awt.GridLayout;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.text.DecimalFormat;
+import java.util.Arrays;
+
+import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+/**
+ * @author Jordan
+ *
+ */
+public class AirplaneSimulatorGUI {
+
+	/**
+	 * @param args
+	 */
+	
+	static String[] planeconfigs = {"3 seats/2 columns/204 capacity"};
+	static String[] methods = {"Back To Front", "Front to Back"};
+	
+    //Comma delimited list for plane layout options
+    static JComboBox planelayout = new JComboBox(planeconfigs);
+    
+    //Comma delimited list for boarding method options
+     static JComboBox boardingmethods = new JComboBox(methods);
+     
+	//Get user input for percent of plane filled (entered as integer and program converts to percent)
+	static JTextField percentfilled = new JTextField("");
+	
+	public static void main(String[] args) 
+	{	   
+	    int result = createInputPanel();
+		
+		//If result = 0
+	    if (result == JOptionPane.OK_OPTION) 
+	    {
+			//Initialize Variables
+	    	int currentSeat = 0;
+			int capacity = 204;
+			double avgPassengerTime = 0.0;
+			double totalBoardTime = 0.0;
+			int boardingMethod = boardingmethods.getSelectedIndex();
+			
+			//Initialize passenger and row total based on percent filled input from Input Window
+			String percentStringInput = percentfilled.getText();
+			int intInput = Integer.parseInt(percentStringInput);
+			double percentInput = (double) intInput / 100;
+			int totalPassengers = (int) (capacity * percentInput);
+			int totalRows = totalPassengers/6;
+			
+			//Constant for time it takes a passenger to sit down
+			int windowSitTime = 3;
+			int middleSitTime = 2;
+			int aisleSitTime = 1;
+			int moveToRow = 4;
+			int moveToBack = 2;
+			
+			//Add 90 sec to totalBoardTime to represent time for first passenger to walk down jetway
+			int preBoardTime = 90;
+			totalBoardTime = preBoardTime;
+				
+			SeatList tempSeatList = new SeatList();
+			String[] seatList = tempSeatList.createSeatList(totalPassengers, totalRows);
+			
+			PassengerList tempPasList = new PassengerList();
+			Passenger[] passengerList = tempPasList.createPassengerList(totalPassengers, seatList);
+			
+			CalculateTime tempTime = new CalculateTime();
+			totalBoardTime = tempTime.calculateBoardTime(boardingMethod, passengerList, totalBoardTime, moveToRow, moveToBack, windowSitTime, middleSitTime, aisleSitTime);
+			
+			//Convert totalBoardTime from seconds to minutes and round to two decimal places
+			totalBoardTime = totalBoardTime / 60;
+			totalBoardTime = Double.parseDouble(new DecimalFormat("#.##").format(totalBoardTime));
+			
+			//Calculate average time per passenger
+			avgPassengerTime = (double) ((totalBoardTime * 60) / totalPassengers);
+			avgPassengerTime = Double.parseDouble(new DecimalFormat("#.##").format(avgPassengerTime));
+			
+			int report = createResultsPanel(totalBoardTime, totalPassengers, avgPassengerTime, intInput);
+		    
+		    //If user clicks Download Results button
+		    if (report == 0)
+			{
+		    	saveResults(totalBoardTime, totalPassengers, capacity, intInput);    	
+			}
+	   }
+	   
+	}
+	
+	private static int createInputPanel()
+	{ 
+	    JPanel inputPanel = new JPanel(new GridLayout(0, 1));
+	    
+	    //Add input fields to JFrame
+	    inputPanel.add(new JLabel("Percent of Plane Filled"));
+	    inputPanel.add(percentfilled);
+	    
+	    inputPanel.add(new JLabel("Plane Layout"));
+	    inputPanel.add(planelayout);
+
+	    inputPanel.add(new JLabel("Boarding Method:"));
+	    inputPanel.add(boardingmethods);
+	    
+	    //If user clicks OK in Input Window, set result to 0
+	    //If user clicks Cancel in Input Window, set result to 1
+	    int result = JOptionPane.showConfirmDialog(null, inputPanel, "Airplane Boarding Simulator",
+	        JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+		
+		return result;
+	}
+	
+	private static int createResultsPanel(double totalBoardTime, int totalPassengers, double avgPassengerTime, int intInput)
+	{
+		//Create Results Window
+		JPanel reportPanel = new JPanel(new GridLayout(0, 1));
+	    
+		//Add simulation results and simulation parameters to Results Window
+		reportPanel.add(new JLabel("Boarding Time: " + totalBoardTime + " minutes"));
+		reportPanel.add(new JLabel("Total Passengers: " + totalPassengers + " people"));
+		reportPanel.add(new JLabel("Average Time Per Passenger: " + avgPassengerTime + " seconds"));
+		
+		String percentOutput = "" + intInput;
+	    reportPanel.add(new JLabel("Percent of Plane Filled: " + percentOutput + "%"));
+	    
+	    reportPanel.add(new JLabel("Plane Layout: " + String.valueOf(planelayout.getSelectedItem())));
+	    reportPanel.add(new JLabel("Boarding Method: " + String.valueOf(boardingmethods.getSelectedItem())));
+	    
+	    //Add Download button to Results Window, if user clicks button set report = 0
+	    String[] options = {"Download Results"};
+	    int report = JOptionPane.showOptionDialog(null, reportPanel, "Simulator Results",
+		        0, JOptionPane.PLAIN_MESSAGE, null, options, "Download Results");
+		
+		return report;
+	}
+	
+	private static void saveResults(double totalBoardTime, int totalPassengers, int capacity, int intInput)
+	{
+    	//Display Save As Dialog box
+    	JFrame guiFrame = new JFrame();
+    	JFileChooser fileDialog = new JFileChooser();
+    	int saveChoice = fileDialog.showSaveDialog(guiFrame);
+    	
+    	//If user chooses file location and enters name of file to save
+    	if (saveChoice == JFileChooser.APPROVE_OPTION)
+    	{
+	    	//Write simulation results and parameters to file at given file path
+    		PrintWriter writer = null;
+			try {
+				writer = new PrintWriter(fileDialog.getSelectedFile(), "UTF-8");
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			writer.println("Boarding Time: " + totalBoardTime + " minutes");
+			writer.println("Total Passengers: " + totalPassengers);
+			writer.println("Average Time Per Passenger: " + ((totalBoardTime * 60)/totalPassengers) + " seconds");
+			writer.println("Plane Layout: 3 seats/2 rows/" + capacity + " capacity");
+			writer.println("Boarding Method: " + String.valueOf(boardingmethods.getSelectedItem()));
+			String percentOutput = "" + intInput;
+			writer.println("Percent of Plane Filled: " + percentOutput + "%");
+			writer.close();
+    	}
+	}
+}

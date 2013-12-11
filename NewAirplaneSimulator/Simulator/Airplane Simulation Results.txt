@@ -1,0 +1,6 @@
+Boarding Time: 21.183333333333334 minutes
+Total Passengers: 204
+Average Time Per Passenger: 6.230392156862745 seconds
+Plane Layout: 3 seats/2 rows/204 capacity
+Boarding Method: Back to Front
+Percent of Plane Filled: 100%

@@ -1,0 +1,70 @@
+/**
+ * 
+ */
+package simulator;
+
+/**
+ * @author Jordan
+ *
+ */
+public class Passenger 
+{
+	int walkspeed;
+	int bags;
+	String destination;
+	double boardtime;
+	boolean personalSpace;
+	
+	public Passenger(int curWalkSpeed, int curBags, String curDestination, boolean animationToggle, boolean personalSpaceToggle)
+	{
+		walkspeed = curWalkSpeed;
+		bags = curBags;
+		destination = curDestination;
+		boardtime = 0.0;
+		personalSpace = personalSpaceToggle;
+	}
+	
+	public int getWalkSpeed()
+	{
+		return walkspeed;
+	}
+	
+	public int setWalkSpeed(int newSpeed)
+	{
+		walkspeed = newSpeed;
+		return walkspeed;
+	}
+	
+	public int getBags()
+	{
+		return bags;
+	}
+	
+	public int setBags(int newBags)
+	{
+		bags = newBags;
+		return bags;
+	}
+	
+	public String getDestination()
+	{
+		return destination;
+	}
+	
+	public String setDestination(String newDestination)
+	{
+		destination = newDestination;
+		return destination;
+	}
+	
+	public double getBoardTime()
+	{
+		return boardtime;
+	}
+	
+	public double setBoardTime(double newBoardTime)
+	{
+		boardtime = newBoardTime;
+		return boardtime;
+	}
+}
